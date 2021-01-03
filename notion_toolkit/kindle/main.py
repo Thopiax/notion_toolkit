@@ -8,8 +8,8 @@ from notion.block import QuoteBlock
 
 from fuzzywuzzy.process import extractOne
 
-from utils import exclude_existing_rows
-from kindle_highlights.schemas import ClippingSchema
+from notion_toolkit.utils import exclude_existing_rows
+from notion_toolkit.kindle.schemas import ClippingSchema
 
 HIGHLIGHTS_ICON_URL = "https://img.icons8.com/ios/250/000000/barber-scissors.png"
 

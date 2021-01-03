@@ -4,9 +4,10 @@ from notion.client import NotionClient
 from notion.collection import Collection
 
 import yaml
+from pathlib import Path
 
 config = None
-with open("config.yaml", "rb+") as config_file:
+with open(Path(".") / "config.yaml", "rb+") as config_file:
     config = yaml.load(config_file)
 
 
