@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "notion_toolkit"
 version = "0.1.0"
-description = "This is a toolkit to automate Notion database maintenance."
+description = "This is a toolkit for programmatically using Notion."
 authors = ["Rafael Ballestiero <rafa.ballestiero@gmail.com>"]
 license = "MIT"
 
@@ -15,6 +15,8 @@ ipykernel = "^5.4.2"
 fuzzywuzzy = "^0.18.0"
 marshmallow = "^3.10.0"
 PyYAML = "^5.3.1"
+python-Levenshtein = "^0.12.0"
+python-box = "^5.2.0"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.6.0"
