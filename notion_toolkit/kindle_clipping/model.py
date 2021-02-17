@@ -36,6 +36,14 @@ class KindleClippingModel(Model):
     def uid(self):
         return str(self.created_at.timestamp())
 
+    @property
+    def name(self):
+        if self.category == "Highlight":
+            return self.content[:75] + (self.content[75:] and '...')
+
+        return f"{self.category} - {self.reference_block.title} @ {self.begin_location}"
+
+
     @classmethod
     def from_clipping(cls, clipping: Clipping, raise_errors: bool = True):
         reference_block = ReferenceModel.find_fuzzy(
@@ -61,7 +69,7 @@ class KindleClippingModel(Model):
 
     def _build(self, row):
         row.uid = self.uid
-        row.name = self.content[:75] + (self.content[75:] and '...')
+        row.name = self.name
 
         row.Type = self.category
         row.Reference = [self.reference_block]
@@ -70,6 +78,9 @@ class KindleClippingModel(Model):
 
         row.set("format.page_icon", HIGHLIGHTS_ICON_URL)
         row.children.add_new(QuoteBlock, title=self.content)
+
+    def __str__(self):
+        return f"#{self.uid} - {self.reference_block.title} @ {self.begin_location} - {self.name}"
 
     def to_dict(self):
         raise NotImplementedError

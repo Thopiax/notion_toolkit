@@ -7,7 +7,7 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-notion = "^0.0.27"
+notion = "^0.0.28"
 wikipedia = "^1.4.0"
 clippings = "^0.6.0"
 ipython = "^7.19.0"
