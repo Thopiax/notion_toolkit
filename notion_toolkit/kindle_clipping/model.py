@@ -12,6 +12,8 @@ from notion_toolkit.config import cfg
 from notion_toolkit.notiorm import Model
 from notion_toolkit.reference import ReferenceModel, ReferenceNotFound
 
+from notion_toolkit.kindle_clipping.utils import exclude_none
+
 
 HIGHLIGHTS_ICON_URL = "https://img.icons8.com/ios/250/000000/barber-scissors.png"
 
@@ -43,11 +45,16 @@ class KindleClippingModel(Model):
 
         return f"{self.category} - {self.reference_block.title} @ {self.begin_location}"
 
-
     @classmethod
-    def from_clipping(cls, clipping: Clipping, raise_errors: bool = True):
-        reference_block = ReferenceModel.find_fuzzy(
-            clipping.document.title, view="Kindle")
+    def from_clipping(cls, clipping: Clipping, raise_errors: bool = True, add_missing_reference: bool = False):
+        if clipping.document is None:
+            if raise_errors:
+                raise BadParsingError(clipping)
+
+            return None
+
+
+        reference_block = ReferenceModel.find_fuzzy(clipping.document.title, view="Kindle")
 
         if reference_block is None:
             if raise_errors:
@@ -65,7 +72,9 @@ class KindleClippingModel(Model):
 
     @classmethod
     def from_clippings(cls, clippings: Iterable[Clipping], raise_errors: bool = False):
-        return list(map(lambda c: cls.from_clipping(c, raise_errors=raise_errors), clippings))
+        instances = map(lambda c: cls.from_clipping(c, raise_errors=raise_errors), clippings)
+
+        return list(exclude_none(instances))
 
     def _build(self, row):
         row.uid = self.uid
@@ -85,26 +94,5 @@ class KindleClippingModel(Model):
     def to_dict(self):
         raise NotImplementedError
 
-# def update_recent_kindle_clippings():
-#     print("Loading Highlights from Clippings File...")
-#     clippings = load_clippings()
-#     recent_highlights = filter_recent_highlights(all_highlights)
 
-#     # recent_highlights = list(filter(lambda h: h["kindle_reference_title"] == "The Magic of Thinking Big", recent_highlights))
-
-#     print("Matching Highlights to Notion recorrds...")
-#     reference_collection = NotionHelper.load_collection("References")
-#     kindle_references = collection_as_dict(reference_collection.get_rows(search="Kindle"))
-
-#     fuzzy_match_notion_references(recent_highlights, kindle_references)
-
-#     print("Pushing new Highlights to Notion...")
-#     kindle_highlights_collection = NotionHelper.load_collection(
-#         "Kindle Highlights")
-#     push_new_highlights_to_notion(
-#         kindle_highlights_collection, recent_highlights)
-
-#     print("Done")
-
-# if __name__ == "__main__":
-#     update_recent_kindle_clippings()
+class BadParsingError(BaseException): pass

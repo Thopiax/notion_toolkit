@@ -59,15 +59,14 @@ class Model(ABC):
         if refresh:
             collection.refresh()
 
-        if view is not None:
-            collection_view = cls.get_view(view)
+        if view is None:
+            return collection.get_rows(search=query, **kwargs)
 
-            collection_view_filter = collection_view._get_record_data()[
-                "query2"]["filter"]
+        collection_view = cls.get_view(view)
 
-            return collection_view.build_query(search=query, filter=collection_view_filter, **kwargs).execute()
-        else:
-            return collection.query(search=query, **kwargs)
+        collection_view_filter = collection_view._get_record_data()["query2"]["filter"]
+
+        return collection_view.build_query(search=query, filter=collection_view_filter, **kwargs).execute()
 
     @classmethod
     @lru_cache(maxsize=32)

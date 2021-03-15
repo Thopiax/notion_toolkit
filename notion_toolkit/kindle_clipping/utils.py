@@ -6,10 +6,21 @@ from fuzzywuzzy.process import extractOne
 from clippings.parser import Clipping
 
 
+def filter_timestamp(metadata, cutoff):
+    if metadata is None:
+        return True
+
+    return metadata.timestamp > cutoff
+
+
 def filter_recent(clippings: Iterable[Clipping], n_days: int = 7) -> Iterable[Clipping]:
     cutoff = datetime.datetime.now() - datetime.timedelta(days=n_days)
 
-    return filter(lambda c: c.metadata.timestamp > cutoff, clippings)
+    return filter(lambda c: filter_timestamp(c.metadata, cutoff), clippings)
+
+
+def exclude_none(clippings: Iterable[Clipping]) -> Iterable[Clipping]:
+    return filter(lambda c: c is not None, clippings)
 
 
 def filter_title(clippings: Iterable[Clipping], title: str) -> Iterable[Clipping]:

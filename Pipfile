@@ -4,13 +4,19 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+clippings = "*"
 notion = "*"
-pandas = "*"
-ipython = "*"
-wikipedia = "*"
-isbnlib = "*"
+python-box = "*"
+pyyaml = "*"
+fuzzywuzzy = "*"
 
 [dev-packages]
+pytest = "*"
+pylint = "*"
+autopep8 = "*"
+
+[scripts]
+kindle = "python -m notion_toolkit.kindle_clipping"
 
 [requires]
-python_version = "3.8"
+python_version = "3.9"

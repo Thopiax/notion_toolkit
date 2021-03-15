@@ -5,7 +5,7 @@ from notion_toolkit.notiorm import Repo
 from clippings.parser import parse_clippings
 
 from notion_toolkit.kindle_clipping.model import KindleClippingModel
-from notion_toolkit.kindle_clipping.utils import filter_recent, filter_title
+from notion_toolkit.kindle_clipping.utils import filter_recent, filter_title, exclude_none
 
 def main():
     """Read the provided clippings file, parse it,
@@ -25,6 +25,9 @@ def main():
     logging.info("Extracting Clippings from file...")
     clippings = parse_clippings(args.clippings_file)
 
+    logging.info("Removing empty clippings...")
+    clippings = exclude_none(clippings)
+
     if args.days > 0:
         logging.info(f"Filtering last {args.days} days...")
         clippings = filter_recent(clippings, args.days)
@@ -37,15 +40,12 @@ def main():
     kindle_clippings = KindleClippingModel.from_clippings(clippings)
 
     for i, clipping in enumerate(kindle_clippings):
-        logging.info(f"Processing Clipping ({i}/{len(kindle_clippings)}): {clipping}")
+        logging.info(f"Processing Clipping ({i + 1}/{len(kindle_clippings)}): {clipping}")
 
-        try:
-            clipping.insert(unique=True, raise_errors=True)
-        except BaseException as e:
-            if args.raise_errors: 
-                raise e
+        result = clipping.insert(unique=True, raise_errors=args.raise_errors)
 
-            logging.warning(e)
+        if result is None:
+            logging.warning("Highlight already updated.")
 
 if __name__ == '__main__':
     main()

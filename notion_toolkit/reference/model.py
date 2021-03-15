@@ -1,3 +1,5 @@
+from notion.collection import CollectionRowBlock
+
 from notion_toolkit.notiorm import Model
 from notion_toolkit.config import cfg
 
