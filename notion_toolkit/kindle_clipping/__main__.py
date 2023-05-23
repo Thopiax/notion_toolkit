@@ -36,16 +36,26 @@ def main():
         logging.info(f"Filtering title: {args.title}...")
         clippings = filter_title(clippings, args.title)
 
-    Repo.init()
-    kindle_clippings = KindleClippingModel.from_clippings(clippings)
 
-    for i, clipping in enumerate(kindle_clippings):
-        logging.info(f"Processing Clipping ({i + 1}/{len(kindle_clippings)}): {clipping}")
+    # print(list(clippings))
+    for clipping in clippings:
+        if clipping.document is None:
+            raise "ERROR"
+        
+        print(clipping.document)
+        print(clipping.content)
+        print(clipping.metadata)
 
-        result = clipping.insert(unique=True, raise_errors=args.raise_errors)
+    # Repo.init()
+    # kindle_clippings = KindleClippingModel.from_clippings(clippings)
 
-        if result is None:
-            logging.warning("Highlight already updated.")
+    # for i, clipping in enumerate(kindle_clippings):
+    #     logging.info(f"Processing Clipping ({i + 1}/{len(kindle_clippings)}): {clipping}")
+
+    #     result = clipping.insert(unique=True, raise_errors=args.raise_errors)
+
+    #     if result is None:
+    #         logging.warning("Highlight already updated.")
 
 if __name__ == '__main__':
     main()

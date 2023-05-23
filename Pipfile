@@ -9,14 +9,20 @@ notion = "*"
 python-box = "*"
 pyyaml = "*"
 fuzzywuzzy = "*"
+emoji-extractor = "*"
+emoji = "*"
+"ruamel.yaml" = "*"
 
 [dev-packages]
 pytest = "*"
 pylint = "*"
 autopep8 = "*"
+python-dotenv = "*"
+black = "*"
 
 [scripts]
 kindle = "python -m notion_toolkit.kindle_clipping"
+export_enhancer = "python -m notion_toolkit.export_enhancer"
 
 [requires]
 python_version = "3.9"

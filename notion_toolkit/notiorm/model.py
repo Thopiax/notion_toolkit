@@ -49,6 +49,8 @@ class Model(ABC):
         if name not in cls.collection_view_ids:
             raise ViewNotFoundError(name)
 
+        print(cls.collection_view_ids, name)
+
         return Repo.load_collection_view(cls.collection_id, cls.collection_view_ids[name])
 
     @classmethod

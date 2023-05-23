@@ -5,7 +5,6 @@ from notion.collection import Collection, CollectionView
 
 from notion_toolkit.config import cfg
 
-
 class Repo(object):
     _client : NotionClient = None
     _collection_map : Dict = None
